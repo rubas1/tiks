@@ -3,11 +3,25 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import {Provider} from 'mobx-react'
+import TaskManager from '../src/store/TaskManager'
+import UserManager from '../src/store/UserManager'
+import RoutineManager from '../src/store/RoutineManager'
+
+const taskManager = new TaskManager()
+const userManager = new UserManager()
+const routineManager = new RoutineManager()
+
+const stores = {
+  taskManager,
+  userManager,
+  routineManager
+}
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Provider {... stores}>
+  <App />
+  </Provider>,
   document.getElementById('root')
 );
 
