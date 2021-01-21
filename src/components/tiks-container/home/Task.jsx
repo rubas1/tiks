@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import  {useLocation, Link} from "react-router-dom";
 import { observer,inject } from 'mobx-react'
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
@@ -9,44 +10,42 @@ import IconButton from '@material-ui/core/IconButton';
 import DoneOutlineIcon from '@material-ui/icons/Done';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-class Task extends Component {
+const Task = inject("userManager","taskManager")(observer((props) => {
+  let location = useLocation().pathname;
+  let task = props.task
+  let username = props.userManager.username
 
-    deleteTask = () =>
-    {
-      let task = this.props.taskManager.currentTask
-      let username = this.props.userManager.username
-      this.props.taskManager.deleteTask(username, task.id)
-    }
+  const deleteTask = () =>{
+    props.taskManager.deleteTask(username, task.id)
+  }
+
+  const deleteTemporaryTask = () => {
+    props.taskManager.deleteTemporaryTask(task.title)
+  }
 
     // updateTask = () => {
-    //   let task = this.props.taskManager.currentTask
+    //   let taskID = this.props.taskManager.currentTask.id
     //   let username = this.props.userManager.username
-    //   this.props.taskManager.updateTask(username, task.id, )
-
+    //   let proprety
+    //   this.props.taskManager.updateTask(username, taskID, )
     // }
-    render() {
-     let task = this.props.task
-      return (
-        <ListItem>
-        <ListItemAvatar>
-          <Avatar>
-            <DoneOutlineIcon />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText
-          primary={task.title}
-        />
-        <ListItemText
-          primary={task.place}
-        />
-        <ListItemSecondaryAction>
-          <IconButton edge="end" aria-label="delete" onClick={this.deleteTask}>
-            <DeleteIcon />
-          </IconButton>
-        </ListItemSecondaryAction>
-      </ListItem>
-        )
-    }
-  }
-  
-  export default inject("userManager","TaskManager")(observer(Task));
+
+    return (
+    <ListItem>
+      <ListItemAvatar>
+        <Avatar>
+          <DoneOutlineIcon />
+        </Avatar>
+      </ListItemAvatar>
+      <ListItemText primary={task.title} />
+      <ListItemText primary={task.place} />
+      <ListItemSecondaryAction>
+        <IconButton edge="end" aria-label="delete" onClick={location === '/home' || location === '/' ? deleteTask : deleteTemporaryTask}>
+          <DeleteIcon />
+        </IconButton>
+      </ListItemSecondaryAction>
+    </ListItem>
+  )
+}))
+
+export default Task
