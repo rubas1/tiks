@@ -13,8 +13,17 @@ class Task extends Component {
 
     deleteTask = () =>
     {
-        console.log("working for me")
+      let task = this.props.taskManager.currentTask
+      let username = this.props.userManager.username
+      this.props.taskManager.deleteTask(username, task.id)
     }
+
+    // updateTask = () => {
+    //   let task = this.props.taskManager.currentTask
+    //   let username = this.props.userManager.username
+    //   this.props.taskManager.updateTask(username, task.id, )
+
+    // }
     render() {
      let task = this.props.task
       return (
@@ -40,4 +49,4 @@ class Task extends Component {
     }
   }
   
-  export default inject("GeneralStore","TaskManager")(observer(Task));
+  export default inject("userManager","TaskManager")(observer(Task));

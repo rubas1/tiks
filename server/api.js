@@ -39,7 +39,7 @@ router.post('/userTasksPerDay', function(request, response){
             path: 'tasks',
         }
     }).exec(function(err, user){
-        response.send(user.allTasks[0].tasks)
+        response.send([user.allTasks[0].tasks, user.allTasks[0].date])
     })
 })
 

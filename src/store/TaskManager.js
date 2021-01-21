@@ -6,13 +6,25 @@ export default class TaskManager
 {
     constructor()
     {
-        this.tasks = []
-        this.temporaryTasks = []
+        this.tasks = [],
+        this.temporaryTasks = {
+            date: new Date(),
+            tasksList: []
+        },
+        this.currentDate = "",
         this.taskInput = {
             title: "",
             place: "",
-            startTime: new Date(),
-            endTime: new Date(),
+            startTime: "",
+            endTime: "",
+            priority: ""
+        }
+        this.currentTask ={
+            id: null,
+            title: "",
+            place: "",
+            startTime: "",
+            endTime: "",
             priority: ""
         }
 
@@ -33,53 +45,57 @@ export default class TaskManager
     addTemporaryTask = () =>
     {
         let task = new Task(this.taskInput.title,this.taskInput.place,this.taskInput.startTime,this.taskInput.endTime,this.taskInput.priority)
-        let checkTask = this.temporaryTasks.find(t => t.title === task.title)
+        let checkTask = this.temporaryTasks.tasksList.find(t => t.title === task.title)
         checkTask?
         alert("task title already exist, please enter another title.")
         :
-        this.temporaryTasks.push(task)
+        this.temporaryTasks.tasksList.push(task)
     }
 
     deleteTemporaryTask = (title) =>
     {
         let taskIndex = this.temporaryTasks.findIndex(t => t.title === title)
-        this.temporaryTasks.splice(taskIndex,1)
+        this.temporaryTasks.tasksList.splice(taskIndex,1)
     }
 
-    getTasks = async (username,date) =>
+    getTasks = async (username) =>
     {
         
-        let response = await axios.get(`http://localhost:${process.env.PORT}/userTasksPerDay/${username}/${date}`)
-        this.tasks = response.data
+        let response = await axios.get(`http://localhost:${process.env.PORT}/userTasksPerDay/${username}/${this.currentDate}`)
+        this.tasks = response.data[0]
+        this.currentDate = response.data[1]
     }
 
-    taskCompleted = async (username,date,taskID) =>
+    taskCompleted = async (username,taskID) =>
     {
         
-        await axios.put(`http://localhost:${process.env.PORT}/completeTask`,{username,date,taskID})
+        await axios.put(`http://localhost:${process.env.PORT}/completeTask`,{username,date: this.currentDate,taskID})
+        this.getTasks(username, this.currentDate)
     }
 
-    deleteTask = async (username,date,taskID) =>
+    deleteTask = async (username,taskID) =>
     {
         
-        await axios.delete(`http://localhost:${process.env.PORT}/deleteUserTask`,{username,date,taskID})
+        await axios.delete(`http://localhost:${process.env.PORT}/deleteUserTask`,{username,date: this.tasks.date,taskID})
+        this.getTasks(username, this.currentDate)
     }
 
-    updateTask = async (username,date,taskID,property,value) =>
+    updateTask = async (username,taskID,property,value) =>
     {
-        await axios.put(`http://localhost:${process.env.PORT}/updateTask`,{username,date,taskID,property,value})
+        await axios.put(`http://localhost:${process.env.PORT}/updateTask`,{username,date: this.currentTask,taskID,property,value})
+        this.getTasks(username, this.currentDate)
     }
 
-    submitTasks = async (username,date) =>
+    submitTasks = async (username) =>
     {
-        let response = await axios.post(`http://localhost:${process.env.PORT}/submitUserTasks`,{username,date,taksArray: this.temporaryTasks})
+        let response = await axios.post(`http://localhost:${process.env.PORT}/submitUserTasks`,{username,date: this.temporaryTasks.date,taksArray: this.temporaryTasks.tasksList})
         console.log(response.data)
-        this.temporaryTasks = []
-
+        this.temporaryTasks.tasksList = []
     }
+
     get numTasks()
     {
-        return this.temporaryTasks.length
+        return this.temporaryTasks.tasksList.length
     }
 
 }
