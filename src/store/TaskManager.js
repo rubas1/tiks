@@ -6,12 +6,14 @@ export default class TaskManager
 {
     constructor()
     {
-        this.tasks = [],
+        this.tasks = []
+        
         this.temporaryTasks = {
             date: new Date(),
             tasksList: []
-        },
-        this.currentDate = "",
+        }
+
+        this.currentDate = ""
         this.taskInput = {
             title: "",
             place: "",
