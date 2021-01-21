@@ -24,6 +24,14 @@ class AddTask extends Component {
     this.props.taskManager.addTemporaryTask()
   }
 
+  setStartTime = (date) =>{
+    this.props.taskManager.taskInput.startTime = date
+  }
+
+  setEndTime = (date) =>{
+    this.props.taskManager.taskInput.endTime = date
+  }
+
     render() {
       return (
      <div className="add-task">
@@ -32,15 +40,15 @@ class AddTask extends Component {
           <div>Task Title </div>
           <input name="title" type="text" placeholder="task title..." value={this.props.taskManager.taskInput.title} onChange={this.handleTitleInput}/>
        </div>
-       <div>
+       {/* <div>
           <span>Search By </span>
-          <select name="taskSearchBy" id="taskSearchBy" value={this.props.GeneralStore.taskSearchBy} onChange={this.inputHandler}>
+          <select name="taskSearchBy" id="taskSearchBy" value="{this.props.GeneralStore.taskSearchBy}" onChange={this.inputHandler}>
           <option value="place">Place</option>
           <option value="category">Category</option>
           </select>
           <br></br>
-          <input name="place" type="text" placeholder="place..." value={this.props.taskManager.taskInput.place} onChange={this.inputHandler}/>
-       </div>
+          <input name="place" type="text" placeholder="place..." value={"this.props.taskManager.taskInput.place"} onChange={this.inputHandler}/>
+       </div> */}
             <div>Approximate Time </div>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <Grid container justify="space-around">
@@ -51,7 +59,7 @@ class AddTask extends Component {
               label="Start Time"
               disablePast
               value={this.props.taskManager.taskInput.startTime}
-              onChange={this.handleTitleInput}
+              onChange={this.setStartTime}
         
             />
             <TimePicker
@@ -61,14 +69,14 @@ class AddTask extends Component {
               label="End Time"
               disablePast
               value={this.props.taskManager.taskInput.endTime}
-              onChange={this.handleTitleInput}
+              onChange={this.setEndTime}
         
             />
           </Grid>
       </MuiPickersUtilsProvider>
        <div className="task-priority">
             <span>Priority </span>
-            <select name="priority" id="taskPriority" value={this.props.taskManagr.taskInput.props} onChange={this.handleTitleInput}>
+            <select name="priority" id="taskPriority" value={this.props.taskManager.taskInput.priority} onChange={this.handleTitleInput}>
             <option value={1}>Low</option>
             <option value={2}>Medium</option>
             <option value={3}>High</option>
@@ -80,4 +88,4 @@ class AddTask extends Component {
     }
   }
   
-  export default inject("TaskManager")(observer(AddTask));
+  export default inject("taskManager")(observer(AddTask));
