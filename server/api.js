@@ -17,11 +17,11 @@ router.post('/userSignUp', function(request, response){
 router.post('/userSignIn', function(request, response){
     let params = request.body
     User.find({username: params.username}, function(err, user){
-        if(user){
+        if(user[0]){
             if(user[0].password === params.password){
                 response.send(user[0])
             }else{
-                response.send("Wrong password")
+                response.send("Login Failed")
             }
         }else{
             response.send(err)
@@ -39,7 +39,11 @@ router.post('/userTasksPerDay', function(request, response){
             path: 'tasks',
         }
     }).exec(function(err, user){
-        response.send([user.allTasks[0].tasks, user.allTasks[0].date])
+        if(!user.allTasks[0] || !user.allTasks[0].tasks){
+            response.send("No tasks for this day")
+        }else{
+            response.send([user.allTasks[0].tasks, user.allTasks[0].date])
+        }
     })
 })
 
@@ -57,6 +61,7 @@ router.post('/deleteUserTask', function(request, response){
     }).exec(function (err, user) {
         user.allTasks[0].tasks[0].remove(function (err){
             if(err === null){
+                user.allTasks[0].save()
                 response.send("removed")
             }else{
                 console.log("removing failed - " + err)
@@ -126,29 +131,31 @@ router.post('/submitUserTasks', function(request, response){
     let tasksArr = request.body.tasksArray
     let date = request.body.date
     let newTasks = new Tasks({date: date})
-    newTasks.save()
-    User.find({username: username}, function(err, user){
-        if(!user[0]){
-            response.send("User not found")
-        }else{
-            user[0].allTasks.push(newTasks)
-            user[0].save()
-        }
-    })
-    User.findOne({username: username}).populate({
-        path: 'allTasks',
-        match: {date: date},
-        populate:{
-            path: 'tasks'
-        }
-    }).exec(function (err, user){
-        tasksArr.forEach(t => {
-            let task = new Task({title: t.title, location: t.location, startTime: t.startTime,endTime: t.endTime, priority: t.priority, completed: false})
-            task.save()
-            user.allTasks[0].tasks.push(task)
+    newTasks.save().then(function(){
+        User.find({username: username}, function(err, user){
+            if(!user[0]){
+                response.send("User not found")
+            }else{
+                user[0].allTasks.push(newTasks)
+                user[0].save().then(function(){
+                    User.findOne({username: username}).populate({
+                        path: 'allTasks',
+                        match: {date: date},
+                        populate:{
+                            path: 'tasks'
+                        }
+                    }).exec(function (err, user){
+                        tasksArr.forEach(t => {
+                            let task = new Task({title: t.title, location: t.location, startTime: t.startTime,endTime: t.endTime, priority: t.priority, completed: false})
+                            task.save()
+                            user.allTasks[0].tasks.push(task)
+                        })
+                        user.allTasks[0].save()
+                        response.send("Tasks added successfly")
+                    })
+                })
+            }
         })
-        user.allTasks[0].save()
-        response.send("Tasks added successfly")
     })
 })
 
