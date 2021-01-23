@@ -4,9 +4,22 @@ const Routine = require('./models/routineSchema')
 const Tasks = require('./models/tasksSchema')
 const Task = require('./models/taskSchema')
 const User = require('./models/userSchema')
+const urllib = require('urllib')
+const apiKey = 'AIzaSyDLv6Zg_G1WuzvGeZ1VwhlEbYdYtk4vGSQ'
 
-// ROUTES
+//API ROUTES
+router.post('/nearPlacesByCategory', function(request, response){
+    let lat = request.body.lat
+    let lng = request.body.lng
+    let category = request.body.category
+    let radius = request.body.radius
+    console.log(lat +" "+ lng +" "+ category +" "+ radius)
+    urllib.request(`https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${radius}&keyword=${category}&key=${apiKey}`, function(err, result){
+    response.send(JSON.parse(result.toString()).results)
+    })
+})
 
+// DATABASE ROUTES
 router.post('/userSignUp', function(request, response){
     let params = request.body
     let user = new User({username: params.username, password: params.password, name: params.name, surname: params.surname})
@@ -158,6 +171,5 @@ router.post('/submitUserTasks', function(request, response){
         })
     })
 })
-
 
 module.exports = router

@@ -1,4 +1,4 @@
-import { observable, makeObservable, action,computed } from 'mobx'
+import {observable, makeObservable, action, computed} from 'mobx'
 import Task  from './Task'
 import axios from 'axios'
 const PORT = 8080

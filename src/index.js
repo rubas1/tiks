@@ -7,15 +7,18 @@ import {Provider} from 'mobx-react'
 import TaskManager from '../src/store/TaskManager'
 import UserManager from '../src/store/UserManager'
 import RoutineManager from '../src/store/RoutineManager'
+import MapManager from '../src/store/MapManager'
 
 const taskManager = new TaskManager()
 const userManager = new UserManager()
 const routineManager = new RoutineManager()
+const mapManager = new MapManager()
 
 const stores = {
   taskManager,
   userManager,
-  routineManager
+  routineManager,
+  mapManager
 }
 
 ReactDOM.render(

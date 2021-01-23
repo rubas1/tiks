@@ -24,6 +24,7 @@ export default class UserManager
 
     userSignIn = async () =>
     {
+        console.log(this.username,this.password)
         let username = this.username
         let password = this.password
         let response = await axios.post(`http://localhost:${PORT}/userSignIn`,{username, password})

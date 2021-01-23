@@ -21,9 +21,9 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
+      {/* <Link color="inherit" href="https://material-ui.com/">
         Tiks
-      </Link>{' '}
+      </Link>{' '} */}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -78,11 +78,12 @@ const SignIn = inject("userManager")
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate>
+          <div className={classes.form} >
             <span>
             <Avatar className={classes.avatar}>
             <AccountCircleIcon />
           </Avatar>
+          <input className="username-input" value={props.userManager.username} onChange={handleUsernameInput} placeholder={"enter your username"}></input>
             <TextField
               variant="outlined"
               margin="normal"
@@ -100,6 +101,7 @@ const SignIn = inject("userManager")
           <Avatar className={classes.avatar}>
             <LockIcon />
           </Avatar>
+          <input className="password-input" value={props.userManager.password} onChange={handlePasswordInput} placeholder={"enter your password"}></input>
             <TextField
               variant="outlined"
               margin="normal"
@@ -138,7 +140,7 @@ const SignIn = inject("userManager")
               Sign Up
             </Button>
             </Link>
-          </form>
+          </div>
         </div>
         <Box mt={8}>
           <Copyright />
