@@ -10,10 +10,13 @@ class App extends Component {
 
   render() {
    
-    return (<Router>
+    return (
+    <Router>
       <div className="App">
-        {this.props.userManager.logged ? <TaskManagerContainer /> : <SignIn />}
+        {console.log(this.props.userManager.logged)}
+        {this.props.userManager.logged ? <TaskManagerContainer /> : <Route path="/" exact component={SignIn} />}
         <Route path="/signup" exact component={SignUp} />
+        {/* <Route path="/signin" exact component={SignIn} /> */}
     </div>
     </Router>)
   }

@@ -19,9 +19,9 @@ function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
       {'Copyright © '}
-      <Link color="inherit" href="https://material-ui.com/">
+      {/* <Link color="inherit" href="https://material-ui.com/">
         Your Website
-      </Link>{' '}
+      </Link>{' '} */}
       {new Date().getFullYear()}
       {'.'}
     </Typography>
@@ -106,7 +106,7 @@ const SignUp = inject("userManager")
         <Typography component="h1" variant="h5">
           Sign up
         </Typography>
-        <form className={classes.form} noValidate>
+        <div className={classes.form} noValidate>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6}>
               <TextField
@@ -191,7 +191,7 @@ const SignUp = inject("userManager")
             Already Have An Account? Click Here To Sign In
           </Button>
               </Link>
-        </form>
+        </div>
       </div>
       <Box mt={5}>
         <Copyright />

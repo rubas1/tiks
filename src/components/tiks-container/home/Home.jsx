@@ -7,18 +7,17 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faMap } from '@fortawesome/free-solid-svg-icons'
 
 class Home extends Component {
-  changeMapState = () =>{
-    //this.props.GeneralStore.changeMapState(true)
-  }
+
+  openHomeMap = () => this.props.mapManager.openMap()
 
   render() {
     return(<div className="home">
       <HeaderDate />
-      <FontAwesomeIcon icon={faMap} size="10x" onClick={this.changeMapState} color="green"/>
-      {/* {this.props.GeneralStore.openMap?<MapView name={this.props.GeneralStore.mapOpener}/>:null} */}
+      <FontAwesomeIcon icon={faMap} size="10x" onClick={this.openHomeMap} color="green"/>
+      {/* {this.props.mapManager.mapOpened ? <MapView /> : null} */}
      <TasksView /> 
     </div>)
   }
 }
   
-export default inject("userManager","taskManager")(observer(Home));
+export default inject("mapManager","userManager","taskManager")(observer(Home));
