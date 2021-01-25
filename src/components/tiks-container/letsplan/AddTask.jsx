@@ -49,13 +49,11 @@ class AddTask extends Component {
   }
 
   handlePriority = (e) => {
-    console.log(e.target.value)
     this.props.taskManager.taskInput.priority = e.target.value
   }
 
   setStartTime = (date) => {
     this.props.taskManager.taskInput.startTime = date
-    console.log(this.props.taskManager.taskInput.startTime)
   }
 
   setEndTime = (date) => {

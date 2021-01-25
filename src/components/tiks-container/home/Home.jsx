@@ -21,4 +21,4 @@ class Home extends Component {
   }
 }
   
-export default inject("mapManager","userManager","taskManager")(observer(Home));
+export default inject("mapManager","userManager","taskManager","routineManager")(observer(Home));

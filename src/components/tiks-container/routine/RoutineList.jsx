@@ -1,21 +1,20 @@
 import React, {Component} from 'react';
 import List from '@material-ui/core/List';
 import { observer,inject } from 'mobx-react'
-import Task from '../home/Task'
+import RoutineView from './RoutineView'
+
 class RoutineList extends Component {
-    
-    render() {
-      let routines = [{title: 'Grocery',place:'Shufersal Haifa'},{title: 'Workout',place:'Holmes Places Haifa'}]
-      return (
-     <div>
-          <List>
-              {routines.map((r,index) =>
-                <Task key={index} task={r}/>
-              )}
-          </List>
-     </div>
-        )
-    }
+
+
+  render() {
+    let routines = this.props.routineManager.routines
+    return (<div className="routines-list">
+        <List> {routines.map((r,index) => <RoutineView key={index} routine={r}/>)} </List>
+      </div>
+    )
   }
+}
   
-  export default RoutineList;
+export default inject("userManager","routineManager")(observer(RoutineList))
+
+// {}
