@@ -11,7 +11,7 @@ import DoneOutlineIcon from '@material-ui/icons/Done';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LetsPlan from '../letsplan/LetsPlan'
 
-const Task = inject("userManager","taskManager")(observer((props) => {
+const Task = inject("userManager","taskManager","routineManager")(observer((props) => {
   let location = useLocation().pathname;
   let task = props.task
   let username = props.userManager.username
@@ -32,6 +32,8 @@ const Task = inject("userManager","taskManager")(observer((props) => {
 
   const taskCompleted = () => props.taskManager.taskCompleted(username, task.id)
 
+  const deleteRoutine = () => props.routineManager.deleteRoutine(username, task.id)
+
   return (
     <ListItem>
       <ListItemAvatar>
@@ -40,13 +42,13 @@ const Task = inject("userManager","taskManager")(observer((props) => {
         </Avatar>
       </ListItemAvatar>
       <ListItemText primary={task.title} />
-      <ListItemText primary={task.place} />
+      <ListItemText primary={task.title} />
       <ListItemSecondaryAction>
         <IconButton edge="end" aria-label="delete" onClick={location === '/home' || location === '/' ? deleteTask : deleteTemporaryTask}>
           <DeleteIcon />
         </IconButton>
         {location === '/home' || location === '/' ? <Link to="/letsplan"><button className="updateTask" onClick={updateTask}>update</button></Link> : null}
-        <button className="complete-task" onClick={taskCompleted}>{task.completed ? "completed" : "complete task"}</button>
+        {location === '/home' ? <button className="complete-task" onClick={taskCompleted}>{task.completed ? "completed" : "complete task"}</button> :null}
       </ListItemSecondaryAction>
     </ListItem>
   )

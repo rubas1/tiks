@@ -1,17 +1,23 @@
 import { observable, makeObservable } from 'mobx'
 import  Task  from './Task'
 
-export default class Routine extends Task
-{
-    constructor(title,place,startTime,endTime,selectedDays)
-    {
-      super(title,place,startTime,endTime)
-        this.days = selectedDays
-        
+export default class Routine{
 
-        makeObservable(this, {
-          days: observable
-        })
-    }
+  constructor(id,title,location,startTime,endTime){
+    this.id = id
+    this.title = title
+    this.location = location
+    this.startTime = startTime
+    this.endTime = endTime
+    this.days = []
 
+    makeObservable(this, {
+      id: observable,
+      days: observable,
+      title: observable,
+      location: observable,
+      startTime: observable,
+      endTime: observable,
+    })
+  }
 }
