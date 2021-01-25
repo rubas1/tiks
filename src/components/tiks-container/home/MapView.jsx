@@ -1,30 +1,63 @@
-import React, {Component} from 'react';
+import React,{useState} from 'react';
 import { observer,inject } from 'mobx-react'
 import GoogleMapReact from 'google-map-react';
-import '../../../style/mapPopUp.css'
+import Modal from '@material-ui/core/Modal';
+import { makeStyles } from '@material-ui/core/styles';
+import Fade from '@material-ui/core/Fade';
+
 const apiKey = 'AIzaSyDLv6Zg_G1WuzvGeZ1VwhlEbYdYtk4vGSQ'
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
+const AnyReactComponent = ({ text }) => <div>{text}</div>
 
-class MapView extends Component {
+const useStyles = makeStyles((theme) => ({
+  modal: {
+    marginTop: '5%',
+      marginLeft: 'auto',
+      marginRight: 'auto',
+      width: '80%',
+      height: '80%',
+  },
+}));
+const MapView =  inject("mapManager")
+(observer((props) => {
+  const classes = useStyles();
 
-  handleApiLoaded  (map, maps) {
-    // use map and maps objects
+  const defaultProps = {
+    center: {
+      lat: 59.95,
+      lng: 30.33
+    },
+    zoom: 11
   }
   
-  closeMapView = () => this.props.mapManager.closeMap()
-  render() {
+  const handleApiLoaded = (map, maps) => {
+    // use map and maps objects
+  }
+
+  const handleClose = () => {
+
+    props.mapManager.closeMap()
+  };
+  
     return (
-      <div  className="map-popup" >
-      <div className="map-popup-inner">
-        <div width='20%' onClick={this.closeMapView}>X</div>
+      <Modal
+        disablePortal
+        disableEnforceFocus
+        disableAutoFocus
+        aria-labelledby="simple-modal-title"
+        aria-describedby="simple-modal-description"
+        className={classes.modal}
+        open={props.mapManager.mapOpened}
+        onClose={handleClose}
+        closeAfterTransition
+
+>
+  <Fade in={props.mapManager.mapOpened}>
   <GoogleMapReact
     bootstrapURLKeys={{ key: 'AIzaSyAtY7Se0K0cqw4t-kUwASAwFbFZADSaLkQ'}}
-    defaultCenter={this.props.center}
-    defaultZoom={this.props.zoom}
+    defaultCenter={defaultProps.center}
+    defaultZoom={defaultProps.zoom}
     yesIWantToUseGoogleMapApiInternals
-    onGoogleApiLoaded={({ map, maps }) => this.handleApiLoaded(map, maps)}
-      
   >
     <AnyReactComponent
       lat={59.955413}
@@ -32,24 +65,9 @@ class MapView extends Component {
       text="My Marker"
     />
   </GoogleMapReact>
-              
-  </div>
-    </div>
+        </Fade>
+  </Modal>
       )
-  }
-
-  // render() {
-  //   return (
-  //   <div  className="map-popup" >
-  //     <div className="map-popup-inner">
-  //       <div width='20%' onClick={this.closeMapView}>X
-  //       </div>
-  //       <GoogleMapReact bootstrapURLKeys={{key: apiKey}} defaultCenter={this.props.center} defaultZoom={this.props.zoom} yesIWantToUseGoogleMapApiInternals onGoogleApiLoaded={({ map, maps }) => this.handleApiLoaded(map, maps)} >
-  //         <AnyReactComponent lat={59.955413} lng={30.337844} text="My Marker" />
-  //       </GoogleMapReact>
-  //     </div>
-  //   </div>)
-  // }
-}
+    })) 
   
-  export default inject("mapManager","taskManager")(observer(MapView));
+  export default MapView;
