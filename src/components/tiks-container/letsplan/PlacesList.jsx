@@ -23,7 +23,7 @@ class PlacesList extends Component {
 
     return(<div>
       <div className="places-list">
-        {this.state.showPlace ? <PlaceDetails place={place} hidePlace={this.hidePlace}/> : <p onDoubleClick={this.displayPlace}>{place.name} </p>}
+        {this.state.showPlace ? <PlaceDetails place={place} hidePlace={this.hidePlace} closePopup={this.props.closePopup}/> : <p onDoubleClick={this.displayPlace}>{place.name} </p>}
         </div>
       </div>
     )

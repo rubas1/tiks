@@ -2,20 +2,20 @@ import { observable, makeObservable } from 'mobx'
 
 export default class Task
 {
-    constructor(title,place,startTime,endTime,priority = null)
+    constructor(id,title,location,startTime,endTime,priority,completed)
     {
-        this.id = null
+        this.id = id
         this.title = title
-        this.place = place
+        this.location = location
         this.startTime = startTime
         this.endTime = endTime
         this.priority = priority
-        this.completed = false
+        this.completed = completed
 
         makeObservable(this, {
             id: observable,
             title: observable,
-            place: observable,
+            location: observable,
             startTime: observable,
             endTime: observable,
             priority: observable,

@@ -7,7 +7,7 @@ class PlacesPopup extends Component {
   closePopup = () => this.props.mapManager.showPlacesPopup = false
   render() {
     return(<div className="places-container">
-      {this.props.mapManager.nearPlaces.map(p => <PlacesList place={p} />)}
+      {this.props.mapManager.nearPlaces.map(p => <PlacesList place={p} closePopup={this.closePopup}/>)}
       <button className="close" onClick={this.closePopup}>X</button>
     </div>)
   }

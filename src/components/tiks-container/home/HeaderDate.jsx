@@ -8,7 +8,12 @@ class HeaderDate extends Component {
 
   getTasks = () =>{
     let username = this.props.userManager.username
-    this.props.taskManager.getTasks(username)
+    let res = this.props.taskManager.getTasks(username)
+    res.then((result) => {
+      if(result === "No tasks for this day"){
+        alert(result)
+      }
+    })
   }
   
   render() {
@@ -29,4 +34,4 @@ class HeaderDate extends Component {
   }
 }
   
-  export default inject("userManager","taskManager")(observer(HeaderDate));
+export default inject("userManager","taskManager")(observer(HeaderDate));

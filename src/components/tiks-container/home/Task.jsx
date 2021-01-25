@@ -9,6 +9,7 @@ import Avatar from '@material-ui/core/Avatar';
 import IconButton from '@material-ui/core/IconButton';
 import DoneOutlineIcon from '@material-ui/icons/Done';
 import DeleteIcon from '@material-ui/icons/Delete';
+import LetsPlan from '../letsplan/LetsPlan'
 
 const Task = inject("userManager","taskManager")(observer((props) => {
   let location = useLocation().pathname;
@@ -16,21 +17,22 @@ const Task = inject("userManager","taskManager")(observer((props) => {
   let username = props.userManager.username
 
   const deleteTask = () =>{
-    props.taskManager.deleteTask(username, task.id)
+     props.taskManager.deleteTask(username, task.id)
   }
 
   const deleteTemporaryTask = () => {
-    props.taskManager.deleteTemporaryTask(task.title)
+    // props.taskManager.deleteTemporaryTask(task.title)
+    console.log("delete from letsplan")
   }
 
-    // updateTask = () => {
-    //   let taskID = this.props.taskManager.currentTask.id
-    //   let username = this.props.userManager.username
-    //   let proprety
-    //   this.props.taskManager.updateTask(username, taskID, )
-    // }
+  const updateTask = () => {
+    props.taskManager.taskInput = {id: task.id, title: task.title, location: task.location, startTime: new Date(), endTime: new Date(), priority: task.priority}
+    props.taskManager.updatingTask = true
+  }
 
-    return (
+  const taskCompleted = () => props.taskManager.taskCompleted(username, task.id)
+
+  return (
     <ListItem>
       <ListItemAvatar>
         <Avatar>
@@ -43,6 +45,8 @@ const Task = inject("userManager","taskManager")(observer((props) => {
         <IconButton edge="end" aria-label="delete" onClick={location === '/home' || location === '/' ? deleteTask : deleteTemporaryTask}>
           <DeleteIcon />
         </IconButton>
+        {location === '/home' || location === '/' ? <Link to="/letsplan"><button className="updateTask" onClick={updateTask}>update</button></Link> : null}
+        <button className="complete-task" onClick={taskCompleted}>{task.completed ? "completed" : "complete task"}</button>
       </ListItemSecondaryAction>
     </ListItem>
   )

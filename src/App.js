@@ -5,6 +5,7 @@ import './App.css';
 import SignIn from './components/user-container/SignIn'
 import SignUp from './components/user-container/SignUp'
 import TaskManagerContainer from './components/tiks-container/taskManagerContainer/TaskManagerContainer'
+import LetsPlan from './components/tiks-container/letsplan/LetsPlan'
 
 class App extends Component {
 
@@ -13,6 +14,7 @@ class App extends Component {
     return (
     <Router>
       <div className="App">
+        {/* <LetsPlan /> */}
         {console.log(this.props.userManager.logged)}
         {this.props.userManager.logged ? <TaskManagerContainer /> : <Route path="/" exact component={SignIn} />}
         <Route path="/signup" exact component={SignUp} />

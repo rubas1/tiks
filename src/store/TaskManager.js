@@ -14,31 +14,24 @@ export default class TaskManager
         }
         this.currentDate = JSON.stringify(new Date()).slice(1,11)
         this.taskInput = {
-            title: "",
-            place: "",
-            startTime: new Date(),
-            endTime: new Date(),
-            priority: 1
-        }
-        this.currentTask ={
             id: null,
             title: "",
-            place: "",
+            location: {
+                lat: 0,
+                lng: 0
+            },
             startTime: new Date(),
             endTime: new Date(),
-            priority: "",
-            taskUpdateInput:{
-                proprety: "",
-                value: ""
-            }
+            priority: 3
         }
+        this.updatingTask = false
 
         makeObservable(this, {
             currentDate: observable,
-            currentTask: observable,
             taskInput: observable,
             tasks: observable,
             temporaryTasks: observable,
+            updatingTask: observable,
             addTemporaryTask: action,
             deleteTemporaryTask: action,
             getTasks: action,
@@ -51,15 +44,40 @@ export default class TaskManager
         })
     }
 
-    updateCurrentTask = (task) => {
-        this.currentTask.id = task.id
-        this.currentTask.title = task.title
-        this.currentTask.place = task.place
-        this.currentTask.startTime = task.startTime
-        this.currentTask.endTime = task.endTime
-        this.currentTask.priority = task.priority
-        this.taskUpdateInput.property = ""
-        this.taskUpdateInput.value = ""
+    SortByPriority = (tasks) => {
+        return tasks.sort(function(a, b) {
+          if (a.priority < b.priority) return 1;
+          if (a.priority > b.priority) return -1;
+          return 0;
+        })
+      }
+
+    updateCurrentTask = async (username) => {
+        let startTime = (this.taskInput.startTime).toString().slice(16,21)
+        let endTime = (this.taskInput.endTime).toString().slice(16,21)
+        let newTask={
+            title: this.taskInput.title,
+            location: this.taskInput.location,
+            startTime: startTime,
+            endTime : endTime,
+            priority: this.taskInput.priority
+        }
+        let response = await axios.post(`http://localhost:${PORT}/UpdateTask`,{username, date: this.currentDate,taskID: this.taskInput.id, task: newTask})
+        this.getTasks(username, this.currentDate)
+    }
+
+    resetTaskInput = () => {
+        this.taskInput = {
+            id: null,
+            title: "",
+            location: {
+                lat: 0,
+                lng: 0
+            },
+            startTime: new Date(),
+            endTime: new Date(),
+            priority: 3
+        }
     }
 
     addTemporaryTask = () =>
@@ -67,7 +85,9 @@ export default class TaskManager
         if(this.taskInput.title === ""){
             alert("Task title can't be empty")
         }else{
-            let task = new Task(this.taskInput.title,this.taskInput.place,this.taskInput.startTime,this.taskInput.endTime,this.taskInput.priority)
+            let startTime = (this.taskInput.startTime).toString().slice(16,21)
+            let endTime = (this.taskInput.endTime).toString().slice(16,21)
+            let task = new Task(null,this.taskInput.title, this.taskInput.location, startTime, endTime, this.taskInput.priority, false)
             let checkTask = this.temporaryTasks.tasksList.find(t => t.title === task.title)
             checkTask ? alert("task title already exist, please enter another title.") : this.temporaryTasks.tasksList.push(task)
             console.log(this.temporaryTasks.tasksList)
@@ -84,10 +104,18 @@ export default class TaskManager
     {
         let response = await axios.post(`http://localhost:${PORT}/userTasksPerDay`,{username, date: this.currentDate})
         if(response.data === "No tasks for this day" || !response.data[0][0]){
-            alert("No tasks for this day" )
+            this.tasks = []
+            return "No tasks for this day"
         }else{
-            this.tasks = response.data[0]
+            this.tasks = []
+            let sortedArr = this.SortByPriority(response.data[0])
+            console.log(sortedArr)
+            sortedArr.forEach(t =>{
+                let newTask = new Task(t._id, t.title, t.location, t.startTime, t.endTime, t.priority, t.completed)
+                this.tasks.push(newTask)
+            })
             this.currentDate = response.data[1]
+            return("Tasks up-to date")
         }
     }
 
