@@ -21,11 +21,11 @@ class HeaderDate extends Component {
     console.log(this.props.taskManager.currentDate)
     return(<div className="header-date">
       <div className="user-welcome">
-        <div>Welcome Back, {name}.</div>
-        <div>Let's Organize Your Day</div>
+        <h3>Welcome Back, {name}.</h3>
+        <h5>Let's Organize Your Day</h5>
         </div>
         <div className="date-picker">
-          <label htmlFor="day">Planning Date </label>
+          <label htmlFor="day">Pick Planning Date </label>
           <input type="date" id="day" name="day" value={this.props.taskManager.currentDate} onChange={this.inputHandler}></input>
           <button className="get-tasks" onClick={this.getTasks}>get tasks</button>
        </div>

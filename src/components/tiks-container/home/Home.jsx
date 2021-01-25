@@ -14,7 +14,8 @@ class Home extends Component {
     return(<div className="home">
       <HeaderDate />
       <FontAwesomeIcon icon={faMap} size="10x" onClick={this.openHomeMap} color="green"/>
-      {/* {this.props.mapManager.mapOpened ? <MapView /> : null} */}
+      {console.log(this.props.mapManager.mapOpened)}
+       {this.props.mapManager.mapOpened ? <MapView /> : null}
      <TasksView /> 
     </div>)
   }

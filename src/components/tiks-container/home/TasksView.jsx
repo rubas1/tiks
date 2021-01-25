@@ -9,6 +9,7 @@ class TasksView extends Component{
     let tasks = this.props.taskManager.tasks
     console.log(tasks)
     return (<div className="tasks-container">
+      <h3>My Tasks</h3>
       {<List> {tasks.map((t,index) => <Task key={index} task={t}/>)} </List>}
     </div>)
   }
