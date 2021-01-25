@@ -7,10 +7,11 @@ class TasksView extends Component{
 
   render(){
     let tasks = this.props.taskManager.tasks
+    console.log(tasks)
     return (<div className="tasks-container">
       {<List> {tasks.map((t,index) => <Task key={index} task={t}/>)} </List>}
     </div>)
   }
 }
   
-  export default inject("userManager","taskManager")(observer(TasksView));;
+export default inject("userManager","taskManager")(observer(TasksView));;

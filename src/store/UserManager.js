@@ -24,11 +24,10 @@ export default class UserManager
 
     userSignIn = async () =>
     {
-        console.log(this.username,this.password)
         let username = this.username
         let password = this.password
         let response = await axios.post(`http://localhost:${PORT}/userSignIn`,{username, password})
-        if(response.data === "Wrong password"){
+        if(response.data === "Wrong password" || response.data === "user not exist"){
             return "Wrong password"
         }else{
             this.name = response.data.name

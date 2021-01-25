@@ -65,7 +65,11 @@ const SignIn = inject("userManager")
   }
 
   const logIn = () => {
-    let response = props.userManager.userSignIn()
+    props.userManager.userSignIn().then(function(res){
+      if(res != "Logged In"){
+        alert("Username or password is incorrect")
+      }
+    })
   }
 
     return(
@@ -83,7 +87,7 @@ const SignIn = inject("userManager")
             <Avatar className={classes.avatar}>
             <AccountCircleIcon />
           </Avatar>
-          <input className="username-input" value={props.userManager.username} onChange={handleUsernameInput} placeholder={"enter your username"}></input>
+          {/* <input className="username-input" value={props.userManager.username} onChange={handleUsernameInput} placeholder={"enter your username"}></input> */}
             <TextField
               variant="outlined"
               margin="normal"
@@ -101,7 +105,7 @@ const SignIn = inject("userManager")
           <Avatar className={classes.avatar}>
             <LockIcon />
           </Avatar>
-          <input className="password-input" value={props.userManager.password} onChange={handlePasswordInput} placeholder={"enter your password"}></input>
+          {/* <input className="password-input" value={props.userManager.password} onChange={handlePasswordInput} placeholder={"enter your password"}></input> */}
             <TextField
               variant="outlined"
               margin="normal"

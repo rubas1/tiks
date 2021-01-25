@@ -8,6 +8,7 @@ class TaskList extends Component {
   submitTasks = () => {
     let username = this.props.userManager.username
     let response = this.props.taskManager.submitTasks(username)
+    this.props.taskManager.resetTaskInput()
   }
 
   render() {

@@ -3,9 +3,12 @@ const Schema = mongoose.Schema
 
 const taskSchema = new Schema({
     title: String,
-    location: String,
-    startTime: Date,
-    endTime: Date,
+    location: {
+        lat: Number,
+        lng: Number
+    },
+    startTime: String,
+    endTime: String,
     priority: Number,
     completed: Boolean
 })

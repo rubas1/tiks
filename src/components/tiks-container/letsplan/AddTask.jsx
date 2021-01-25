@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { BrowserRouter as Router, Route, Link} from 'react-router-dom'
 import { observer,inject } from 'mobx-react'
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
@@ -35,10 +36,26 @@ class AddTask extends Component {
   
   addTemporaryTask = () => {
     this.props.taskManager.addTemporaryTask()
+
+  }
+
+  updateTask = () => {
+    let username = this.props.userManager.username
+    let res = this.props.taskManager.updateCurrentTask(username)
+    res.then(() => {
+      this.props.taskManager.updatingTask = false
+      this.props.taskManager.resetTaskInput()
+    })
+  }
+
+  handlePriority = (e) => {
+    console.log(e.target.value)
+    this.props.taskManager.taskInput.priority = e.target.value
   }
 
   setStartTime = (date) => {
     this.props.taskManager.taskInput.startTime = date
+    console.log(this.props.taskManager.taskInput.startTime)
   }
 
   setEndTime = (date) => {
@@ -64,7 +81,7 @@ class AddTask extends Component {
             <option value="category">Category</option>
           </select>
           <br></br>
-          <input name="place" type="text" placeholder={this.props.mapManager.taskSearchBy} value={this.props.mapManager.taskSearchBy === "category" ? this.props.mapManager.searchInput.category : this.props.mapManager.searchInput.location} onChange={this.handleSearchInput} />
+          <input name="location" type="text" placeholder={this.props.mapManager.taskSearchBy} value={this.props.mapManager.taskSearchBy === "category" ? this.props.mapManager.searchInput.category : this.props.mapManager.searchInput.location} onChange={this.handleSearchInput} />
           <button className="search" onClick={this.startSearch}>search</button>
        </div>
        {/* <div>Approximate Time</div> */}
@@ -93,16 +110,16 @@ class AddTask extends Component {
       </MuiPickersUtilsProvider>
        <div className="task-priority">
             <span>Priority </span>
-            <select name="priority" id="taskPriority" value={this.props.taskManager.taskInput.priority} onChange={this.handleTitleInput}>
+            <select name="priority" id="taskPriority" value={this.props.taskManager.taskInput.priority} onChange={this.handlePriority}>
             <option value={1}>Low</option>
             <option value={2}>Medium</option>
             <option value={3}>High</option>
             </select>
        </div>
-          <button type="submit" onClick={this.addTemporaryTask}>Add Task</button>
+          {this.props.taskManager.updatingTask ? <Link to="/home"><button type="submit" onClick={this.updateTask}>Update</button></Link> : <button type="submit" onClick={this.addTemporaryTask}>Add Task</button>}
      </div></div>
       )
     }
   }
   
-  export default inject("mapManager","taskManager")(observer(AddTask));
+  export default inject("userManager","mapManager","taskManager")(observer(AddTask));

@@ -8,7 +8,7 @@ class LetsPlan extends Component {
     return (
     <div className="lets-plan">
       <AddTask />
-      <TaskList />
+      {this.props.taskManager.updatingTask ? null : <TaskList />}
     </div>)
   }
 }
