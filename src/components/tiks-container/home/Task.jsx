@@ -36,8 +36,10 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const Task = inject("userManager","taskManager")(observer((props) => {
-  const classes = useStyles();
+
+
+const Task = inject("userManager","taskManager","routineManager")(observer((props) => {
+const classes = useStyles();
   let location = useLocation().pathname;
   let task = props.task
   let username = props.userManager.username
@@ -67,6 +69,9 @@ const Task = inject("userManager","taskManager")(observer((props) => {
     }
     
   }
+
+  const deleteRoutine = () => props.routineManager.deleteRoutine(username, task.id)
+
   return (
     <ListItem className={classes.item} >
       <ListItemAvatar>
@@ -79,8 +84,10 @@ const Task = inject("userManager","taskManager")(observer((props) => {
           }
         </Avatar>
       </ListItemAvatar>
+
       <ListItemText className={classes.title} primary={task.title} />
       <ListItemText className={classes.title} primary={task.place} />
+
       <ListItemSecondaryAction>
         <IconButton className={classes.icons}  aria-label="delete" onClick={location === '/home' || location === '/' ?
          deleteTask :
@@ -103,6 +110,7 @@ const Task = inject("userManager","taskManager")(observer((props) => {
           </IconButton>
           :
           null}
+
       </ListItemSecondaryAction>
     </ListItem>
   )

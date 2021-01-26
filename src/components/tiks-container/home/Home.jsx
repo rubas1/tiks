@@ -38,6 +38,8 @@ const Home = inject("mapManager","userManager","taskManager")(observer((props) =
      <TasksView /> 
     </div>)
   
+
 }))
   
 export default Home;
+

@@ -134,9 +134,10 @@ router.get('/userRoutines/:username', function(request, response){
     })
 })
 
-router.delete('/userRoutines', function(request, response){
+router.post('/deleteUserRoutine', function(request, response){
     let username = request.body.username
     let routineID = request.body.routineID
+    console.log(username)
     User.findOne({username: username}).populate({
         path: 'routines',
         match: {_id: routineID},

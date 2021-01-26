@@ -15,61 +15,76 @@ import {
 } from '@material-ui/pickers';
 
 class AddRoutine extends Component {
-  inputHandler = (event) => 
-  {
-    this.props.GeneralStore.handleInput(event)
+
+  constructor(){
+    super()
+    this.state = {
+      saved: false,
+      checkedDays: []
+    }
   }
-   handleDays = (event) => {
-    this.props.GeneralStore.setDayPicked(event.target.value);
-  };
-
-  setRoutineStartTime = (date) => {
-
-    this.props.GeneralStore.setRoutineStartTime(date);
+  componentDidMount() {
+    this.setState({checkedDays: this.props.routineManager.getCheckedDays()})
   }
 
-  setRoutineEndTime = (date) => {
+  handleTitle = (e) => this.props.routineManager.routineInput.title = e.target.value
 
-    this.props.GeneralStore.setRoutineEndTime(date);
+  handleDays = (e) => {
+    this.props.routineManager.addDay
+    // let day = e.target.value
+    // this.props.routineManager.routineInput.days[day] = !this.props.routineManager.routineInput.days[day]
+    // console.log(this.props.routineManager.routineInput.days)
+    // this.setState({checkedDays: this.props.routineManager.getCheckedDays()},()=>console.log(this.props.routineManager.routineInput.days))
+  }
+  
+
+  handleLocation = (e) => this.props.routineInput.location = e.target.value
+
+  setStartTime = (date) => {
+    this.props.routineManager.routineInput.startTime = date
+  }
+
+  setEndTime = (date) => {
+    this.props.routineManager.routineInput.endTime = date
   }
 
   addRoutine = () =>
   {
-    this.props.RoutineManager.addRoutine()
+    this.props.routineManager.addRoutine(this.props.userManager.username)
+    this.setState({saved: true})
   }
-    render() {
-      let days= ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+
+  closeAddRoutine = () => this.props.close()
+
+  render() {
+    let days = ["sunday","monday"]
       return (
      <div>
-        <h3>My Routines</h3>
+        <h3>New routine</h3>
         <div>
-          <div>Routine Title </div>
-          <input name="routineTitle" type="text" placeholder="routine title..." value={this.props.GeneralStore.routineTitle} onChange={this.inputHandler}/>
+          <div> Title </div>
+          <input name="routineTitle" type="text" placeholder="title..." value={this.props.routineManager.routineInput.title} onChange={this.handleTitle}/>
        </div>
        <div>
-          <span>Search By </span>
-          <select name="routineSearchBy" id="taskSearchBy" value={this.props.GeneralStore.routineSearchBy} onChange={this.inputHandler}>
-          <option value="place">Place</option>
-          <option value="category">Category</option>
-          </select>
-          <br></br>
-          <input name="routinePlace" type="text" placeholder="place..." value={this.props.GeneralStore.routinePlace} onChange={this.inputHandler}/>
+          <span>Location </span>
+          <input name="routineLocation" type="text" placeholder="location..." value={this.props.routineManager.routineInput.location} onChange={this.handleLocation}/>
        </div>
 
         <InputLabel id="select-multiple-days">Select Days </InputLabel>
         <Select
-          name="dayPicked"
+          name="days"
           labelId="select-multiple-days-label"
           id="select-multiple-days-checkbox"
           multiple
-          value={this.props.GeneralStore.dayPicked}
-          onChange={this.inputHandler}
+          value={this.props.routineManager.days}
+          onChange={this.handleDays}
           input={<Input />}
           renderValue={(selected) => selected.join(', ')}
         >
           {days.map((day) => (
             <MenuItem key={day} value={day}>
-              <Checkbox checked={this.props.GeneralStore.dayPicked.indexOf(day) > -1} />
+              <Checkbox checked={this.props.routineManager.
+             days.indexOf(day) > -1} />
               <ListItemText primary={day} />
             </MenuItem>
           ))}
@@ -83,8 +98,8 @@ class AddRoutine extends Component {
               id="time-picker"
               label="Start Time"
               disablePast
-              value={this.props.GeneralStore.routineStartTime}
-              onChange={this.setRoutineStartTime}
+              value={this.props.routineManager.routineInput.startTime}
+              onChange={this.setStartTime}
         
             />
             <TimePicker
@@ -93,16 +108,16 @@ class AddRoutine extends Component {
               id="time-picker"
               label="End Time"
               disablePast
-              value={this.props.GeneralStore.routineEndTime}
-              onChange={this.setRoutineEndTime}
+              value={this.props.routineManager.routineInput.endTime}
+              onChange={this.setEndTime}
         
             />
           </Grid>
       </MuiPickersUtilsProvider>
-      <button onClick={this.addRoutine}>Add Routine</button>
+      {!this.state.saved ? <button onClick={this.addRoutine}>Save</button> : <button onClick={this.closeAddRoutine}>X</button>}
      </div>
         )
     }
   }
   
-  export default inject("GeneralStore","TaskManager","RoutineManager")(observer(AddRoutine));
+  export default inject("userManager","taskManager","routineManager")(observer(AddRoutine));

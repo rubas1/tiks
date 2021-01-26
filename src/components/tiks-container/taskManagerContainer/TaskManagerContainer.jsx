@@ -7,7 +7,9 @@ import LetsPlan from '../letsplan/LetsPlan'
 import Routine from '../routine/Routine';
 
 class TaskManagerContainer extends Component {
-
+  componentDidMount() {
+    this.props.routineManager.getRoutines(this.props.userManager.username)
+  }
   render(){
     return (
     <div>
@@ -20,4 +22,4 @@ class TaskManagerContainer extends Component {
   }
 }
   
-export default observer(TaskManagerContainer);
+export default inject("userManager","routineManager")(observer(TaskManagerContainer))

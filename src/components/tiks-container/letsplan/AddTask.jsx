@@ -75,6 +75,7 @@ const AddTask =  inject("mapManager","taskManager","userManager")
     })
   }
 
+
   const handlePriority = (e) => {
     console.log(e.target.value)
     props.taskManager.taskInput.priority = e.target.value
@@ -83,6 +84,7 @@ const AddTask =  inject("mapManager","taskManager","userManager")
   const setStartTime = (date) => {
     props.taskManager.taskInput.startTime = date
     console.log(props.taskManager.taskInput.startTime)
+
   }
 
   const setEndTime = (date) => {
