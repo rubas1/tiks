@@ -40,6 +40,7 @@ export default class TaskManager
             updateTask: action,
             submitTasks: action,
             updateCurrentTask: action,
+            resetTaskInput: action,
             numTasks: computed
         })
     }
@@ -121,7 +122,6 @@ export default class TaskManager
 
     taskCompleted = async (username,taskID) =>
     {
-        
         await axios.put(`http://localhost:${PORT}/completeTask`,{username,date: this.currentDate,taskID})
         this.getTasks(username, this.currentDate)
     }
@@ -145,6 +145,7 @@ export default class TaskManager
         let response = await axios.post(`http://localhost:${PORT}/submitUserTasks`,{username,date: this.temporaryTasks.date, tasksArray: this.temporaryTasks.tasksList})
         console.log(response.data)
         this.temporaryTasks.tasksList = []
+        this.resetTaskInput()
     }
 
     get numTasks()

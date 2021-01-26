@@ -53,6 +53,7 @@ export default class MapsStore{
     }
 
     async getNearPlacesByCategory(){
+        this.nearPlaces= []
         await this.getCurrentLocation()
         let places = await axios.post(`http://localhost:${PORT}/nearPlacesByCategory`, {lat: this.currentLocation.lat, lng: this.currentLocation.lng, radius: this.radius, category: this.searchInput.category})
         places.data.forEach(p => {

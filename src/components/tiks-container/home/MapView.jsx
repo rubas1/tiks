@@ -4,12 +4,14 @@ import GoogleMapReact from 'google-map-react';
 import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
 import Fade from '@material-ui/core/Fade';
+
 import Avatar from '@material-ui/core/Avatar';
 import RoomOutlinedIcon from '@material-ui/icons/Room';
 
 const apiKey = 'AIzaSyDLv6Zg_G1WuzvGeZ1VwhlEbYdYtk4vGSQ'
 
 const AnyReactComponent = () => <RoomOutlinedIcon style={{color:"blue"}}/>
+
 const useStyles = makeStyles((theme) => ({
   modal: {
     marginTop: '5%',
@@ -30,14 +32,18 @@ const MapView =  inject("mapManager","taskManager")
     },
     zoom: 12
   }
-  
+
+  let placeSpots = props.taskManager.tasks.map(function(t) {
+    return ({lat: t.location.lat, lng: t.location.lng})
+  })
+
   const handleApiLoaded = (map, maps) => {
     // use map and maps objects
   }
 
   const handleClose = () => {
-
     props.mapManager.closeMap()
+
   };
   
     return (
@@ -45,13 +51,12 @@ const MapView =  inject("mapManager","taskManager")
         disablePortal
         disableEnforceFocus
         disableAutoFocus
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
+        aria-labelledby="map-view"
+        aria-describedby="map-view-description"
         className={classes.modal}
         open={props.mapManager.mapOpened}
         onClose={handleClose}
         closeAfterTransition
-
 >
   <Fade in={props.mapManager.mapOpened}>
   <GoogleMapReact
@@ -60,6 +65,7 @@ const MapView =  inject("mapManager","taskManager")
     defaultZoom={defaultProps.zoom}
     yesIWantToUseGoogleMapApiInternals
   >
+
     {props.taskManager.tasks.map(t =>
      {
        if(t.location)
@@ -78,7 +84,7 @@ const MapView =  inject("mapManager","taskManager")
   </GoogleMapReact>
         </Fade>
   </Modal>
-      )
-    })) 
+)
+})) 
   
-  export default MapView;
+export default MapView;

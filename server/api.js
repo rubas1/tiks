@@ -29,6 +29,7 @@ router.post('/userSignUp', function(request, response){
 
 router.post('/userSignIn', function(request, response){
     let params = request.body
+    console.log(params)
     User.find({username: params.username}, function(err, user){
         if(user[0]){
             if(user[0].password === params.password){
@@ -129,13 +130,15 @@ router.post('/userRoutine', function(request, response){
 router.get('/userRoutines/:username', function(request, response){
     let username = request.params.username
     User.findOne({username: username}).populate('routines').exec(function (err, user){
+        console.log('im here')
         response.send(user.routines)
     })
 })
 
-router.delete('/userRoutines', function(request, response){
+router.post('/deleteUserRoutine', function(request, response){
     let username = request.body.username
     let routineID = request.body.routineID
+    console.log(username)
     User.findOne({username: username}).populate({
         path: 'routines',
         match: {_id: routineID},

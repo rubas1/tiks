@@ -8,101 +8,155 @@ import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   MuiPickersUtilsProvider,
   TimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
-class AddRoutine extends Component {
-  inputHandler = (event) => 
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    display: 'grid',
+    backgroundColor: 'white',
+    alignItems: 'center',
+  },
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: 200,
+    },
+    '& .MuiButton-root':{
+      margin: theme.spacing(1),
+      width: 200,
+    },
+      '& .MuiTimePicker-root':{
+        margin: theme.spacing(1),
+        width: 100,
+      },
+    backgroundColor: 'white'
+    }
+  }));
+  
+const AddRoutine =  inject("userManager","routineManager")
+(observer((props) =>
+{
+  let classes = useStyles();
+  let days= ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+
+  const setRoutineLocation = (event) =>
   {
-    this.props.GeneralStore.handleInput(event)
+    props.routineManager.routineInput.location = event.target.value
   }
-   handleDays = (event) => {
-    this.props.GeneralStore.setDayPicked(event.target.value);
-  };
-
-  setRoutineStartTime = (date) => {
-
-    this.props.GeneralStore.setRoutineStartTime(date);
-  }
-
-  setRoutineEndTime = (date) => {
-
-    this.props.GeneralStore.setRoutineEndTime(date);
-  }
-
-  addRoutine = () =>
+  const setRoutineTitle = (event) => 
   {
-    this.props.RoutineManager.addRoutine()
+    props.routineManager.routineInput.title = event.target.value
   }
-    render() {
-      let days= ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
+
+  const setRoutineStartTime = (date) => {
+
+    props.routineManager.routineInput.startTime = date
+  }
+
+  const setRoutineEndTime = (date) => {
+
+    props.routineManager.routineInput.endTime = date
+  }
+
+  const inputHandler = (event) => 
+  {
+    props.routineManager.handleInput(event)
+  }
+
+  const addRoutine = () =>
+  {
+    let username = props.userManager.username
+    props.routineManager.addRoutine(username)
+  }
+  const addDay = (day) =>
+  {
+    props.routineManager.addDay(day)
+  }
+
       return (
-     <div>
-        <h3>My Routines</h3>
-        <div>
-          <div>Routine Title </div>
-          <input name="routineTitle" type="text" placeholder="routine title..." value={this.props.GeneralStore.routineTitle} onChange={this.inputHandler}/>
-       </div>
-       <div>
-          <span>Search By </span>
-          <select name="routineSearchBy" id="taskSearchBy" value={this.props.GeneralStore.routineSearchBy} onChange={this.inputHandler}>
-          <option value="place">Place</option>
-          <option value="category">Category</option>
-          </select>
-          <br></br>
-          <input name="routinePlace" type="text" placeholder="place..." value={this.props.GeneralStore.routinePlace} onChange={this.inputHandler}/>
-       </div>
-
+        <Container className={classes.paper,classes.root} >
+      <Typography variant="h5" >
+         Daily Routines
+      </Typography>
+      <TextField
+              id="title"
+              label="Title"
+              name="title"
+              value={props.routineManager.routineInput.title}
+              onChange={setRoutineTitle}
+              autoFocus
+            />
+        {/* <TextField
+              id="location"
+              label="Location"
+              name="location"
+              value={props.routineManager.routineInput.location}
+              onChange={setRoutineLocation}
+            /> */}
         <InputLabel id="select-multiple-days">Select Days </InputLabel>
         <Select
-          name="dayPicked"
+          name="days"
           labelId="select-multiple-days-label"
           id="select-multiple-days-checkbox"
           multiple
-          value={this.props.GeneralStore.dayPicked}
-          onChange={this.inputHandler}
+          value={props.routineManager.days}
+          onChange={inputHandler}
           input={<Input />}
           renderValue={(selected) => selected.join(', ')}
         >
           {days.map((day) => (
             <MenuItem key={day} value={day}>
-              <Checkbox checked={this.props.GeneralStore.dayPicked.indexOf(day) > -1} />
+              <Checkbox checked={props.routineManager.days.indexOf(day) > -1} />
               <ListItemText primary={day} />
             </MenuItem>
           ))}
         </Select>
-        <h4>Approximate Time </h4>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <Grid container justify="space-around">
             <TimePicker
               name="routineStartTime"
               margin="normal"
               id="time-picker"
-              label="Start Time"
+              label="Starting Hours"
               disablePast
-              value={this.props.GeneralStore.routineStartTime}
-              onChange={this.setRoutineStartTime}
+              value={props.routineManager.routineInput.startTime}
+              onChange={setRoutineStartTime}
         
             />
             <TimePicker
               name="routineEndTime"
               margin="normal"
               id="time-picker"
-              label="End Time"
+              label="Ending Hours"
               disablePast
-              value={this.props.GeneralStore.routineEndTime}
-              onChange={this.setRoutineEndTime}
+              value={props.routineManager.routineInput.endTime}
+              onChange={setRoutineEndTime}
         
             />
           </Grid>
       </MuiPickersUtilsProvider>
-      <button onClick={this.addRoutine}>Add Routine</button>
-     </div>
+      <Button
+          type="submit"
+          width='20%'
+          variant="contained"
+          color="secondary"
+          style={{ fontSize: 10 }}
+          onClick={addRoutine}
+        >
+          Add Routine
+        </Button>   
+          </Container>
         )
-    }
-  }
+    
+  }))
   
-  export default inject("GeneralStore","TaskManager","RoutineManager")(observer(AddRoutine));
+  export default AddRoutine;
