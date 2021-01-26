@@ -44,13 +44,12 @@ const MapView =  inject("mapManager")
         disablePortal
         disableEnforceFocus
         disableAutoFocus
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
+        aria-labelledby="map-view"
+        aria-describedby="map-view-description"
         className={classes.modal}
         open={props.mapManager.mapOpened}
         onClose={handleClose}
         closeAfterTransition
-
 >
   <Fade in={props.mapManager.mapOpened}>
   <GoogleMapReact

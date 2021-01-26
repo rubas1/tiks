@@ -86,7 +86,6 @@ const SignIn = inject("userManager")
             <Avatar className={classes.avatar}>
             <AccountCircleIcon />
           </Avatar>
-          {/* <input className="username-input" value={props.userManager.username} onChange={handleUsernameInput} placeholder={"enter your username"}></input> */}
             <TextField
               variant="outlined"
               margin="normal"
@@ -104,7 +103,6 @@ const SignIn = inject("userManager")
           <Avatar className={classes.avatar}>
             <LockIcon />
           </Avatar>
-          {/* <input className="password-input" value={props.userManager.password} onChange={handlePasswordInput} placeholder={"enter your password"}></input> */}
             <TextField
               variant="outlined"
               margin="normal"
