@@ -3,13 +3,13 @@ import  Task  from './Task'
 
 export default class Routine{
 
-  constructor(id,title,location,startTime,endTime){
+  constructor(id,title,location,startTime,endTime,days){
     this.id = id
     this.title = title
     this.location = location
     this.startTime = startTime
     this.endTime = endTime
-    this.days = []
+    this.days = days
     makeObservable(this, {
       id: observable,
       days: observable,

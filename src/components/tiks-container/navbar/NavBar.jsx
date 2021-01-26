@@ -56,34 +56,34 @@ const NavBar = inject("taskManager")
       <AppBar position="static">
         <Toolbar>
          <Grid container spacing={2}>
-            <Grid item xs={3} sm={3}>
+            <Grid item xs={4} sm={4}>
               <Link to="/home" className="link">
                <Avatar variant="square" className={classes.avatar}>
                 <HomeOutlinedIcon className={classes.icon}/>
               </Avatar>
             </Link>
             </Grid>
-            <Grid item xs={3} sm={3}>
+            <Grid item xs={4} sm={4}>
             <Link to="/letsplan" className="link" onClick={resetTaskInput}>
                 <Avatar variant="square" className={classes.avatar}>
                 <PostAddOutlinedIcon className={classes.icon}/>
               </Avatar>
               </Link>
             </Grid>
-            <Grid item xs={3} sm={3}>
+            <Grid item xs={4} sm={4}>
             <Link to="/routine" className="link">
             <Avatar variant="square" className={classes.avatar}>
                 <UpdateOutlined className={classes.icon}/>
               </Avatar>
             </Link>
             </Grid>
-            <Grid item xs={3} sm={3}>
+            {/* <Grid item xs={3} sm={3}>
             <Link to="/report" className="link">
             <Avatar variant="square" className={classes.avatar}>
                 <AssessmentOutlinedIcon className={classes.icon}/>
               </Avatar>
             </Link>
-            </Grid>
+            </Grid> */}
         </Grid>
      </Toolbar>
      </AppBar>

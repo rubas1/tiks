@@ -9,7 +9,7 @@ const routineSchema = new Schema({
     },
     startTime: String,
     endTime: String,
-    days: [Number]
+    days: [String]
 })
 
 const Routine = mongoose.model("RoutineModel", routineSchema)
