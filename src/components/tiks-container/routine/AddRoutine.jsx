@@ -95,13 +95,13 @@ const AddRoutine =  inject("userManager","routineManager")
               onChange={setRoutineTitle}
               autoFocus
             />
-        <TextField
+        {/* <TextField
               id="location"
               label="Location"
               name="location"
               value={props.routineManager.routineInput.location}
               onChange={setRoutineLocation}
-            />
+            /> */}
         <InputLabel id="select-multiple-days">Select Days </InputLabel>
         <Select
           name="days"

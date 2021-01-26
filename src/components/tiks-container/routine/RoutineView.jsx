@@ -38,7 +38,7 @@ const RoutineView = inject("userManager","taskManager","routineManager")(observe
         let retDays = []
         days.forEach(d => {
             console.log(d)
-            retDays.push(d.split(0))
+            retDays.push(d.slice(0,2))
         })
         console.log(retDays)
         return retDays
@@ -47,7 +47,7 @@ const RoutineView = inject("userManager","taskManager","routineManager")(observe
     let routine = props.routine
     console.log(routine.days)
     let username = props.userManager.username
-    let allDays = ['S','M','T','W','T','F','S']
+    let allDays = ['Su','Mo','Tu','We','Th','Fr','Sa']
     let days = getDaysSelected(routine.days)
     console.log(days)
      const deleteRoutine = () => props.routineManager.deleteRoutine(username, routine.id)
@@ -61,13 +61,12 @@ const RoutineView = inject("userManager","taskManager","routineManager")(observe
       </ListItemAvatar>
       <ListItemText className={classes.title} primary={routine.title} />
       {
-          days.map(d => {
-              allDays.includes(d)?
-              <ListItemText className={classes.title} primary={d} />
-              :
-              <ListItemText className={classes.title} primary={d} disabled/>
-          })
-      }
+            <ListItemText className={classes.title} primary={days.map(d => d + " ")}/>
+              // allDays.includes(d)?
+              
+              // :
+              // <ListItemText className={classes.title} primary={d} disabled/>
+          }
       <ListItemSecondaryAction>
         <IconButton onClick={deleteRoutine} className={classes.icons}>
           <DeleteIcon />

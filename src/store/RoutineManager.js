@@ -9,7 +9,7 @@ export default class RoutineManager
     {
         this.routines = []
         this.days = []
-        this.routineInput = new Routine(null,"","",new Date(),new Date())
+        this.routineInput = new Routine(null,"","",new Date(),new Date(),[])
 
         makeObservable(this, {
           routines: observable,
@@ -33,9 +33,10 @@ export default class RoutineManager
 
     getRoutines = async (username) =>{
         let response = await axios.get(`http://localhost:${PORT}/userRoutines/${username}`)
-        this.routineInput = new Routine(null,"","",new Date(),new Date())
+        this.routineInput = new Routine(null,"","",new Date(),new Date(),[])
         this.days = []
         this.routines = response.data
+        console.log(response.data)
     }
 
     addRoutine = async (username) =>{
