@@ -10,7 +10,6 @@ export default class Routine{
     this.startTime = startTime
     this.endTime = endTime
     this.days = []
-
     makeObservable(this, {
       id: observable,
       days: observable,

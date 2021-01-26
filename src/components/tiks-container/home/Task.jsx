@@ -70,7 +70,6 @@ const classes = useStyles();
     
   }
 
-  const deleteRoutine = () => props.routineManager.deleteRoutine(username, task.id)
 
   return (
     <ListItem className={classes.item} >

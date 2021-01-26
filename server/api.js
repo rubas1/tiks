@@ -130,6 +130,7 @@ router.post('/userRoutine', function(request, response){
 router.get('/userRoutines/:username', function(request, response){
     let username = request.params.username
     User.findOne({username: username}).populate('routines').exec(function (err, user){
+        console.log('im here')
         response.send(user.routines)
     })
 })
