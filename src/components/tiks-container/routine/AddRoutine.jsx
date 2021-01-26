@@ -20,17 +20,14 @@ class AddRoutine extends Component {
     super()
     this.state = {
       saved: false,
-      checkedDays: []
     }
   }
-  componentDidMount() {
-    this.setState({checkedDays: this.props.routineManager.getCheckedDays()})
-  }
+
 
   handleTitle = (e) => this.props.routineManager.routineInput.title = e.target.value
 
   handleDays = (e) => {
-    this.props.routineManager.addDay
+    this.props.routineManager.addDay(e.target.value)
     // let day = e.target.value
     // this.props.routineManager.routineInput.days[day] = !this.props.routineManager.routineInput.days[day]
     // console.log(this.props.routineManager.routineInput.days)

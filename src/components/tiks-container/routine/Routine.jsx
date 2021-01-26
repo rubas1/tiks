@@ -17,7 +17,6 @@ class Routine extends Component {
     this.props.routineManager.getRoutines(this.props.userManager.username)
     this.setState({addingRoutine: false})
   }
-
   render() {
     return (<div className="routines-div">
       <h3>My daily routines</h3>
