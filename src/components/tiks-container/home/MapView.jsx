@@ -4,8 +4,14 @@ import GoogleMapReact from 'google-map-react';
 import Modal from '@material-ui/core/Modal';
 import { makeStyles } from '@material-ui/core/styles';
 import Fade from '@material-ui/core/Fade';
+
+import Avatar from '@material-ui/core/Avatar';
+import RoomOutlinedIcon from '@material-ui/icons/Room';
+
 const apiKey = 'AIzaSyDLv6Zg_G1WuzvGeZ1VwhlEbYdYtk4vGSQ'
-const AnyReactComponent = ({ text }) => <div>{text}</div>
+
+const AnyReactComponent = () => <RoomOutlinedIcon style={{color:"blue"}}/>
+
 const useStyles = makeStyles((theme) => ({
   modal: {
     marginTop: '5%',
@@ -13,18 +19,18 @@ const useStyles = makeStyles((theme) => ({
       marginRight: 'auto',
       width: '80%',
       height: '80%',
-    },
-  })
-)
-
-const MapView =  inject("taskManager","mapManager")(observer((props) => {
+  },
+}));
+const MapView =  inject("mapManager","taskManager")
+(observer((props) => {
   const classes = useStyles();
+  
   const defaultProps = {
     center: {
-      lat: 32.0831488,
-      lng: 34.7930624
+      lat: props.taskManager.tasks[0].location.lat || 32.0853,
+      lng: props.taskManager.tasks[0].location.lng || 34.7818
     },
-    zoom: 18
+    zoom: 12
   }
 
   let placeSpots = props.taskManager.tasks.map(function(t) {
@@ -59,12 +65,22 @@ const MapView =  inject("taskManager","mapManager")(observer((props) => {
     defaultZoom={defaultProps.zoom}
     yesIWantToUseGoogleMapApiInternals
   >
-    <AnyReactComponent
-      lat={59.955413}
-      lng={30.337844}
-      text="My Marker"
-    />
 
+    {props.taskManager.tasks.map(t =>
+     {
+       if(t.location)
+       {
+        return(
+          <AnyReactComponent
+          lat = {t.location.lat}
+          lng = {t.location.lng}
+          />
+            )
+       }
+
+    })
+    }
+  
   </GoogleMapReact>
         </Fade>
   </Modal>
