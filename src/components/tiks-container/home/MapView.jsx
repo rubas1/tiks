@@ -68,7 +68,7 @@ const MapView =  inject("taskManager","mapManager")(observer((props) => {
   </GoogleMapReact>
         </Fade>
   </Modal>
-  </div>)
+)
 })) 
   
 export default MapView;

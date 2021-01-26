@@ -17,7 +17,7 @@ export default class RoutineManager
           addRoutine: action,
           getRoutines: action,
           deleteRoutine: action,
-          getCheckedDays: action
+          addDay: action
 
         })
     }
