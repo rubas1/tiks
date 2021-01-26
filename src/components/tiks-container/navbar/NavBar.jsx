@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Link} from 'react-router-dom'
+import { observer,inject } from 'mobx-react'
 import Avatar from '@material-ui/core/Avatar';
 import Grid from '@material-ui/core/Grid';
 import AppBar from '@material-ui/core/AppBar';
@@ -39,8 +40,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NavBar = () =>  {
+const NavBar = inject("taskManager")
+(observer((props) => {
+
+
   const classes = useStyles();
+
+  const resetTaskInput = () => 
+  {
+    props.taskManager.resetTaskInput()
+  }
+
     return(
       <div className={classes.paper}>
       <AppBar position="static">
@@ -54,7 +64,7 @@ const NavBar = () =>  {
             </Link>
             </Grid>
             <Grid item xs={3} sm={3}>
-            <Link to="/letsplan" className="link">
+            <Link to="/letsplan" className="link" onClick={resetTaskInput}>
                 <Avatar variant="square" className={classes.avatar}>
                 <PostAddOutlinedIcon className={classes.icon}/>
               </Avatar>
@@ -80,5 +90,5 @@ const NavBar = () =>  {
 
      </div>
     )
-}
+}))
 export default NavBar;

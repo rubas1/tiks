@@ -37,28 +37,34 @@ const MapView =  inject("taskManager","mapManager")(observer((props) => {
 
   const handleClose = () => {
     props.mapManager.closeMap()
-  }
- 
-  return (<div>
-     <Modal
-      disablePortal
-      disableEnforceFocus
-      disableAutoFocus
-      aria-labelledby="simple-modal-title"
-      aria-describedby="simple-modal-description"
-      className={classes.modal}
-      open={props.mapManager.mapOpened}
-      onClose={handleClose}
-      closeAfterTransition
-    >
-    <Fade in={props.mapManager.mapOpened}>
-      <GoogleMapReact
-      bootstrapURLKeys={{ key: 'AIzaSyAtY7Se0K0cqw4t-kUwASAwFbFZADSaLkQ'}}
-      defaultCenter={defaultProps.center}
-      defaultZoom={defaultProps.zoom}
-      yesIWantToUseGoogleMapApiInternals
-    >
-    {props.taskManager.tasks.map(t => <AnyReactComponent lat={32.0831488} lng={34.7930624} text="My Marker"/>)}
+
+  };
+  
+    return (
+      <Modal
+        disablePortal
+        disableEnforceFocus
+        disableAutoFocus
+        aria-labelledby="map-view"
+        aria-describedby="map-view-description"
+        className={classes.modal}
+        open={props.mapManager.mapOpened}
+        onClose={handleClose}
+        closeAfterTransition
+>
+  <Fade in={props.mapManager.mapOpened}>
+  <GoogleMapReact
+    bootstrapURLKeys={{ key: 'AIzaSyAtY7Se0K0cqw4t-kUwASAwFbFZADSaLkQ'}}
+    defaultCenter={defaultProps.center}
+    defaultZoom={defaultProps.zoom}
+    yesIWantToUseGoogleMapApiInternals
+  >
+    <AnyReactComponent
+      lat={59.955413}
+      lng={30.337844}
+      text="My Marker"
+    />
+
   </GoogleMapReact>
         </Fade>
   </Modal>

@@ -29,6 +29,7 @@ router.post('/userSignUp', function(request, response){
 
 router.post('/userSignIn', function(request, response){
     let params = request.body
+    console.log(params)
     User.find({username: params.username}, function(err, user){
         if(user[0]){
             if(user[0].password === params.password){

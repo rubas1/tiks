@@ -3,121 +3,206 @@ import { BrowserRouter as Router, Route, Link} from 'react-router-dom'
 import { observer,inject } from 'mobx-react'
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import TextField from '@material-ui/core/TextField';
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import MenuItem from '@material-ui/core/MenuItem';
 import PlacesPopup from './PlacesPopup'
 import {
   MuiPickersUtilsProvider,
   TimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    display: 'grid',
+    backgroundColor: 'white',
+    alignItems: 'center',
+  },
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: 200,
+    },
+    '& .MuiButton-root':{
+      margin: theme.spacing(1),
+      width: 200,
+    },
+      '& .MuiTimePicker-root':{
+        margin: theme.spacing(1),
+        width: 100,
+      },
+    backgroundColor: 'white'
+    }
+  }));
 
-
-class AddTask extends Component {
-
-
-  handleTitleInput = (e) =>{
+const AddTask =  inject("mapManager","taskManager","userManager")
+(observer((props) => {
+  let classes = useStyles();
+  const handleTitleInput = (e) =>{
     let name = e.target.name
     let val = e.target.value
-    this.props.taskManager.taskInput[name] = val
+    props.taskManager.taskInput[name] = val
   }
 
-  handleSelector = (e) => {
+  const handleSelector = (e) => {
     let selector = e.target.value
-    this.props.mapManager.taskSearchBy = selector
+    props.mapManager.taskSearchBy = selector
   }
 
-  handleSearchInput = (e) => {
+  const handleSearchInput = (e) => {
     let value = e.target.value
-    if(this.props.mapManager.taskSearchBy === 'category'){
-      this.props.mapManager.searchInput.category = value
+    if(props.mapManager.taskSearchBy === 'category'){
+      props.mapManager.searchInput.category = value
     }else{
-      this.props.mapManager.searchInput.location = value
+      props.mapManager.searchInput.location = value
     }
   }
   
-  addTemporaryTask = () => {
-    this.props.taskManager.addTemporaryTask()
+  const addTemporaryTask = () => {
+    props.taskManager.addTemporaryTask()
 
   }
 
-  updateTask = () => {
-    let username = this.props.userManager.username
-    let res = this.props.taskManager.updateCurrentTask(username)
+  const updateTask = () => {
+    let username = props.userManager.username
+    let res = props.taskManager.updateCurrentTask(username)
     res.then(() => {
-      this.props.taskManager.updatingTask = false
-      this.props.taskManager.resetTaskInput()
+      props.taskManager.updatingTask = false
+      props.taskManager.resetTaskInput()
     })
   }
 
-  handlePriority = (e) => {
-    this.props.taskManager.taskInput.priority = e.target.value
+
+  const handlePriority = (e) => {
+    console.log(e.target.value)
+    props.taskManager.taskInput.priority = e.target.value
   }
 
-  setStartTime = (date) => {
-    this.props.taskManager.taskInput.startTime = date
+  const setStartTime = (date) => {
+    props.taskManager.taskInput.startTime = date
+    console.log(props.taskManager.taskInput.startTime)
+
   }
 
-  setEndTime = (date) => {
-    this.props.taskManager.taskInput.endTime = date
+  const setEndTime = (date) => {
+    props.taskManager.taskInput.endTime = date
   }
 
-  startSearch = () =>{
-    this.props.mapManager.getNearPlacesByCategory()
+  const startSearch = () =>{
+    props.mapManager.getNearPlacesByCategory()
   }
 
-  // searchInputVal = () => 
-
-    render() {
-      return (<div>{this.props.mapManager.showPlacesPopup ? <PlacesPopup /> : null}
-     <div className="add-task">
-       <h3>Let's Plan Your Day</h3>
-       <div className="newTask-container">
-          <h5>Task Name </h5>
-          <input name="title" type="text" placeholder="task name..." value={this.props.taskManager.taskInput.title} onChange={this.handleTitleInput}/>
-          <h5>Search By</h5>
-          <select name="taskSearchBy" id="taskSearchBy" value={this.props.mapManager.taskSearchBy} onChange={this.handleSelector}>
-            <option value="location">Location</option>
-            <option value="category">Category</option>
-          </select>
-          <br></br>
-          <input name="location" type="text" placeholder={this.props.mapManager.taskSearchBy} value={this.props.mapManager.taskSearchBy === "category" ? this.props.mapManager.searchInput.category : this.props.mapManager.searchInput.location} onChange={this.handleSearchInput} />
-          <button className="search" onClick={this.startSearch}>search</button>
-       </div>
-       {/* <div>Approximate Time</div> */}
+      return (
+     <Container className={classes.paper,classes.root} >
+      <Typography variant="h5" >
+         {props.taskManager.updatingTask?'Update Task  ':`Let's Plan Your Day`}
+      </Typography>
+       <TextField
+              id="title"
+              label="title"
+              name="title"
+              value={props.taskManager.taskInput.title}
+              onChange={handleTitleInput}
+              autoFocus
+            />
+        <TextField
+          id="select-search-by"
+          select
+          label="Search By"
+          value={props.mapManager.taskSearchBy}
+          onChange={handleSelector}
+        >
+           <MenuItem value='location'>
+            Location
+            </MenuItem>
+            <MenuItem value='category'>
+            Category
+            </MenuItem>
+        </TextField>
+          <TextField
+              id="location"
+              label={props.mapManager.taskSearchBy}
+              name="location"
+              value={props.mapManager.taskSearchBy === "category" ? props.mapManager.searchInput.category : props.mapManager.searchInput.location}
+              onChange={handleSearchInput}
+            />
+          <Button
+            type="submit"
+            width='10%'
+            variant="contained"
+            color="primary"
+            style={{ fontSize: 10 }}
+            onClick={startSearch}
+          >
+            Search
+          </Button>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <Grid container justify="space-around">
+          <Grid container justify="space-around" spacing={1}>
             <TimePicker
               name="startTime"
-              margin="normal"
               id="time-picker"
               label="Start Time"
               disablePast
-              value={this.props.taskManager.taskInput.startTime}
-              onChange={this.setStartTime}
+              value={props.taskManager.taskInput.startTime}
+              onChange={setStartTime}
             />
             <TimePicker
               name="endTime"
-              margin="normal"
               id="time-picker"
               label="End Time"
               disablePast
-              value={this.props.taskManager.taskInput.endTime}
-              onChange={this.setEndTime}
+              value={props.taskManager.taskInput.endTime}
+              onChange={setEndTime}
         
-            />
+            />       
           </Grid>
       </MuiPickersUtilsProvider>
-       <div className="task-priority">
-            <span>Priority </span>
-            <select name="priority" id="taskPriority" value={this.props.taskManager.taskInput.priority} onChange={this.handlePriority}>
-            <option value={1}>Low</option>
-            <option value={2}>Medium</option>
-            <option value={3}>High</option>
-            </select>
-       </div>
-          {this.props.taskManager.updatingTask ? <Link to="/home"><button type="submit" onClick={this.updateTask}>Update</button></Link> : <button type="submit" onClick={this.addTemporaryTask}>Add Task</button>}
-     </div></div>
+      <TextField
+          id="taskPriority"
+          name="priority"
+          select
+          label="Priority"
+          value={props.taskManager.taskInput.priority}
+          onChange={handlePriority}
+        >
+           <MenuItem value={1}>
+           Low
+            </MenuItem>
+            <MenuItem value={2}>
+            Medium
+            </MenuItem>
+            <MenuItem value={3}>
+            High
+            </MenuItem>
+        </TextField>
+          {props.taskManager.updatingTask ?
+          <Link to="/home" style={{textDecoration: 'none'}}>
+            <Button
+          type="submit"
+          width='20%'
+          variant="contained"
+          color="secondary"
+          style={{ fontSize: 10 }}
+          onClick={updateTask}
+        >
+          Update Task
+        </Button></Link>
+           :
+           <Button
+          type="submit"
+          width='20%'
+          variant="contained"
+          color="primary"
+          style={{ fontSize: 10 }}
+          onClick={addTemporaryTask}
+        >
+          Add Task
+        </Button>}
+     </Container>
       )
-    }
-  }
+  }))
   
-  export default inject("userManager","mapManager","taskManager")(observer(AddTask));
+  export default AddTask;
