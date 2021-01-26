@@ -8,113 +8,155 @@ import Select from '@material-ui/core/Select';
 import Checkbox from '@material-ui/core/Checkbox';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+import TextField from '@material-ui/core/TextField';
+import Button from '@material-ui/core/Button';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   MuiPickersUtilsProvider,
   TimePicker,
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
-class AddRoutine extends Component {
-
-  constructor(){
-    super()
-    this.state = {
-      saved: false,
+const useStyles = makeStyles((theme) => ({
+  paper: {
+    display: 'grid',
+    backgroundColor: 'white',
+    alignItems: 'center',
+  },
+  root: {
+    '& .MuiTextField-root': {
+      margin: theme.spacing(1),
+      width: 200,
+    },
+    '& .MuiButton-root':{
+      margin: theme.spacing(1),
+      width: 200,
+    },
+      '& .MuiTimePicker-root':{
+        margin: theme.spacing(1),
+        width: 100,
+      },
+    backgroundColor: 'white'
     }
-  }
-
-
-  handleTitle = (e) => this.props.routineManager.routineInput.title = e.target.value
-
-  handleDays = (e) => {
-    this.props.routineManager.addDay(e.target.value)
-    // let day = e.target.value
-    // this.props.routineManager.routineInput.days[day] = !this.props.routineManager.routineInput.days[day]
-    // console.log(this.props.routineManager.routineInput.days)
-    // this.setState({checkedDays: this.props.routineManager.getCheckedDays()},()=>console.log(this.props.routineManager.routineInput.days))
-  }
+  }));
   
+const AddRoutine =  inject("userManager","routineManager")
+(observer((props) =>
+{
+  let classes = useStyles();
+  let days= ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 
-  handleLocation = (e) => this.props.routineInput.location = e.target.value
-
-  setStartTime = (date) => {
-    this.props.routineManager.routineInput.startTime = date
-  }
-
-  setEndTime = (date) => {
-    this.props.routineManager.routineInput.endTime = date
-  }
-
-  addRoutine = () =>
+  const setRoutineLocation = (event) =>
   {
-    this.props.routineManager.addRoutine(this.props.userManager.username)
-    this.setState({saved: true})
+    props.routineManager.routineInput.location = event.target.value
+  }
+  const setRoutineTitle = (event) => 
+  {
+    props.routineManager.routineInput.title = event.target.value
   }
 
-  closeAddRoutine = () => this.props.close()
+  const setRoutineStartTime = (date) => {
 
-  render() {
-    let days = ["sunday","monday"]
+    props.routineManager.routineInput.startTime = date
+  }
+
+  const setRoutineEndTime = (date) => {
+
+    props.routineManager.routineInput.endTime = date
+  }
+
+  const inputHandler = (event) => 
+  {
+    props.routineManager.handleInput(event)
+  }
+
+  const addRoutine = () =>
+  {
+    let username = props.userManager.username
+    props.routineManager.addRoutine(username)
+  }
+  const addDay = (day) =>
+  {
+    props.routineManager.addDay(day)
+  }
+
       return (
-     <div>
-        <h3>New routine</h3>
-        <div>
-          <div> Title </div>
-          <input name="routineTitle" type="text" placeholder="title..." value={this.props.routineManager.routineInput.title} onChange={this.handleTitle}/>
-       </div>
-       <div>
-          <span>Location </span>
-          <input name="routineLocation" type="text" placeholder="location..." value={this.props.routineManager.routineInput.location} onChange={this.handleLocation}/>
-       </div>
-
+        <Container className={classes.paper,classes.root} >
+      <Typography variant="h5" >
+         Daily Routines
+      </Typography>
+      <TextField
+              id="title"
+              label="Title"
+              name="title"
+              value={props.routineManager.routineInput.title}
+              onChange={setRoutineTitle}
+              autoFocus
+            />
+        <TextField
+              id="location"
+              label="Location"
+              name="location"
+              value={props.routineManager.routineInput.location}
+              onChange={setRoutineLocation}
+            />
         <InputLabel id="select-multiple-days">Select Days </InputLabel>
         <Select
           name="days"
           labelId="select-multiple-days-label"
           id="select-multiple-days-checkbox"
           multiple
-          value={this.props.routineManager.days}
-          onChange={this.handleDays}
+          value={props.routineManager.days}
+          onChange={inputHandler}
           input={<Input />}
           renderValue={(selected) => selected.join(', ')}
         >
           {days.map((day) => (
             <MenuItem key={day} value={day}>
-              <Checkbox checked={this.props.routineManager.
-             days.indexOf(day) > -1} />
+              <Checkbox checked={props.routineManager.days.indexOf(day) > -1} />
               <ListItemText primary={day} />
             </MenuItem>
           ))}
         </Select>
-        <h4>Approximate Time </h4>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           <Grid container justify="space-around">
             <TimePicker
               name="routineStartTime"
               margin="normal"
               id="time-picker"
-              label="Start Time"
+              label="Starting Hours"
               disablePast
-              value={this.props.routineManager.routineInput.startTime}
-              onChange={this.setStartTime}
+              value={props.routineManager.routineInput.startTime}
+              onChange={setRoutineStartTime}
         
             />
             <TimePicker
               name="routineEndTime"
               margin="normal"
               id="time-picker"
-              label="End Time"
+              label="Ending Hours"
               disablePast
-              value={this.props.routineManager.routineInput.endTime}
-              onChange={this.setEndTime}
+              value={props.routineManager.routineInput.endTime}
+              onChange={setRoutineEndTime}
         
             />
           </Grid>
       </MuiPickersUtilsProvider>
-      {!this.state.saved ? <button onClick={this.addRoutine}>Save</button> : <button onClick={this.closeAddRoutine}>X</button>}
-     </div>
+      <Button
+          type="submit"
+          width='20%'
+          variant="contained"
+          color="secondary"
+          style={{ fontSize: 10 }}
+          onClick={addRoutine}
+        >
+          Add Routine
+        </Button>   
+          </Container>
         )
-    }
-  }
+    
+  }))
   
-  export default inject("userManager","taskManager","routineManager")(observer(AddRoutine));
+  export default AddRoutine;

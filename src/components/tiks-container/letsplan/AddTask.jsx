@@ -144,7 +144,7 @@ const AddTask =  inject("mapManager","taskManager","userManager")
             <TimePicker
               name="startTime"
               id="time-picker"
-              label="Start Time"
+              label="Starting Hours"
               disablePast
               value={props.taskManager.taskInput.startTime}
               onChange={setStartTime}
@@ -152,7 +152,7 @@ const AddTask =  inject("mapManager","taskManager","userManager")
             <TimePicker
               name="endTime"
               id="time-picker"
-              label="End Time"
+              label="Ending Hours"
               disablePast
               value={props.taskManager.taskInput.endTime}
               onChange={setEndTime}
